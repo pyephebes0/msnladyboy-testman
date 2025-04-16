@@ -4,12 +4,15 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
 
+import { handler } from '/build/handler.js'; // หลังจาก build แล้ว
+
 const app = express();
 app.use(cors({
     origin: 'https://urgent-anthia-pyephebes0-bdb76743.koyeb.app',
     credentials: true
 }));
 app.use(express.json());
+app.use(express.static('static'));
 
 const mongoUri = 'mongodb+srv://xyz928msnladyboy:9U7MoU6J27ZIw1WE@pyephebes.4sn4j.mongodb.net/msnladyboy';
 mongoose.connect(mongoUri, {
@@ -103,5 +106,6 @@ app.get('/profile', authMiddleware, async (req, res) => {
     }
 });
 
+app.use(handler);
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
