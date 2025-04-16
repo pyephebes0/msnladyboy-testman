@@ -61,7 +61,7 @@ app.post('/login', async (req, res) => {
     res.cookie('token', token, {
         httpOnly: true,
         secure: true, // ใช้ true เมื่อ deploy (HTTPS)
-        sameSite: 'Lax',
+        sameSite: 'None',
         maxAge: 24 * 60 * 60 * 1000
     });
 
