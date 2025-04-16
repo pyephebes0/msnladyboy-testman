@@ -53,25 +53,32 @@ app.post('/login', async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
         return res.status(401).json({ error: 'Invalid credentials' });
     }
+
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1d' });
-    res.json({ token });
+
+    res.cookie('token', token, {
+        httpOnly: true,
+        secure: true, // ใช้ true เมื่อ deploy (HTTPS)
+        sameSite: 'Lax',
+        maxAge: 24 * 60 * 60 * 1000
+    });
+
+    res.json({ message: 'Login successful' });
 });
 
 const authMiddleware = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
-  
+    const token = req.cookies.token;
     if (!token) return res.status(401).json({ error: 'No token provided' });
   
     try {
-      const user = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = user;
+      const decoded = jwt.verify(token, JWT_SECRET);
+      req.userId = decoded.userId;
       next();
     } catch (err) {
       res.status(403).json({ error: 'Invalid token' });
     }
   };
-
+  
 
 app.post('/posts', authMiddleware, async (req, res) => {
     const { title, content } = req.body;
@@ -93,24 +100,15 @@ app.get('/search', async (req, res) => {
 
 // Profile route (protected)
 app.get('/profile', authMiddleware, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.userId);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-        res.json({
-            username: user.username,
-            email: user.email
-        });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to load profile' });
-    }
-});
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json({ username: user.username, email: user.email });
+  });
 
 app.use(handler);
 
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+    console.log(`Server running on port ${port}`);
 });

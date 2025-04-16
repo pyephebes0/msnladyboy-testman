@@ -27,6 +27,7 @@
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },
+        credentials: 'include'
       });
 
       // อ่าน body และเก็บข้อมูลในตัวแปร
@@ -54,6 +55,7 @@
     try {
       const res = await fetch("https://urgent-anthia-pyephebes0-bdb76743.koyeb.app/posts", {
         method: "POST",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${getToken()}`,
