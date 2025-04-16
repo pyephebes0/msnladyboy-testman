@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
 
-import { handler } from '/build/handler.js'; // หลังจาก build แล้ว
+import { handler } from './build/handler.js'; // หลังจาก build แล้ว
 
 const app = express();
 app.use(cors({
