@@ -25,7 +25,7 @@
     try {
       const res = await fetch("https://urgent-anthia-pyephebes0-bdb76743.koyeb.app/profile", {
         headers: {
-          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")}`,
+          Authorization: `Bearer ${getToken()}`,
         },
       });
 
