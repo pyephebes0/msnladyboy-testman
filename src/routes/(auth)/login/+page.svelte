@@ -6,7 +6,7 @@
   let error = '';
 
   async function login() {
-    const res = await fetch("http://localhost:3000/login", {
+    const res = await fetch("https://urgent-anthia-pyephebes0-bdb76743.koyeb.app/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

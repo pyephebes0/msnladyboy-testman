@@ -17,7 +17,7 @@
 
     try {
       // สมัครสมาชิก
-      const res = await fetch('http://localhost:3000/register', {
+      const res = await fetch('https://urgent-anthia-pyephebes0-bdb76743.koyeb.app/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password })
@@ -25,7 +25,7 @@
 
       if (res.ok) {
         // สมัครเสร็จ → login ต่อทันที
-        const loginRes = await fetch('http://localhost:3000/login', {
+        const loginRes = await fetch('https://urgent-anthia-pyephebes0-bdb76743.koyeb.app/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })

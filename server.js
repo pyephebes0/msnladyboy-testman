@@ -5,7 +5,10 @@ import jwt from 'jsonwebtoken';
 import cors from 'cors';
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'https://urgent-anthia-pyephebes0-bdb76743.koyeb.app',
+    credentials: true
+}));
 app.use(express.json());
 
 const mongoUri = 'mongodb+srv://xyz928msnladyboy:9U7MoU6J27ZIw1WE@pyephebes.4sn4j.mongodb.net/msnladyboy';

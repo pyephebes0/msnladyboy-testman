@@ -28,7 +28,7 @@
   });
 
   async function fetchPosts() {
-    const res = await fetch(`http://localhost:3000/search?q=${q}`);
+    const res = await fetch(`https://urgent-anthia-pyephebes0-bdb76743.koyeb.app/search?q=${q}`);
     posts = await res.json();
   }
 

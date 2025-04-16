@@ -4,7 +4,7 @@
     let posts = [];
   
     async function fetchPosts() {
-      const res = await fetch('http://localhost:3000/posts');
+      const res = await fetch('https://urgent-anthia-pyephebes0-bdb76743.koyeb.app/posts');
       posts = await res.json();
     }
   

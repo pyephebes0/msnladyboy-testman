@@ -4,7 +4,7 @@
   
     async function submitPost() {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3000/posts', {
+      const res = await fetch('https://urgent-anthia-pyephebes0-bdb76743.koyeb.app/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
