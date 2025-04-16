@@ -69,16 +69,16 @@ app.post('/login', async (req, res) => {
 const authMiddleware = (req, res, next) => {
     const token = req.cookies.token;
     if (!token) return res.status(401).json({ error: 'No token provided' });
-  
+
     try {
-      const decoded = jwt.verify(token, JWT_SECRET);
-      req.userId = decoded.userId;
-      next();
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.userId = decoded.userId;
+        next();
     } catch (err) {
-      res.status(403).json({ error: 'Invalid token' });
+        res.status(403).json({ error: 'Invalid token' });
     }
-  };
-  
+};
+
 
 app.post('/posts', authMiddleware, async (req, res) => {
     const { title, content } = req.body;
@@ -100,16 +100,11 @@ app.get('/search', async (req, res) => {
 
 // Profile route (protected)
 app.get('/profile', authMiddleware, async (req, res) => {
-    try {
-      const user = await User.findById(req.userId).select('-passwordHash');
-      if (!user) return res.status(404).json({ error: 'User not found' });
-  
-      res.json(user);
-    } catch (err) {
-      console.error("Error in /profile:", err);
-      res.status(500).json({ error: 'Server error' });
-    }
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json({ username: user.username, email: user.email });
   });
+
 app.use(handler);
 
 const port = process.env.PORT || 3000;
