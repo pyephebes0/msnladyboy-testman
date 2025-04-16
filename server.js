@@ -100,11 +100,16 @@ app.get('/search', async (req, res) => {
 
 // Profile route (protected)
 app.get('/profile', authMiddleware, async (req, res) => {
-    const user = await User.findById(req.userId);
-    if (!user) return res.status(404).json({ error: 'User not found' });
-    res.json({ username: user.username, email: user.email });
+    try {
+      const user = await User.findById(req.userId).select('-passwordHash');
+      if (!user) return res.status(404).json({ error: 'User not found' });
+  
+      res.json(user);
+    } catch (err) {
+      console.error("Error in /profile:", err);
+      res.status(500).json({ error: 'Server error' });
+    }
   });
-
 app.use(handler);
 
 const port = process.env.PORT || 3000;
