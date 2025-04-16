@@ -2,6 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+
 import cors from 'cors';
 
 import { handler } from './build/handler.js'; // หลังจาก build แล้ว
@@ -66,18 +68,20 @@ app.post('/login', async (req, res) => {
     res.json({ message: 'Login successful' });
 });
 
-const authMiddleware = (req, res, next) => {
+function authMiddleware(req, res, next) {
     const token = req.cookies.token;
-    if (!token) return res.status(401).json({ error: 'No token provided' });
+    if (!token) {
+        return res.status(401).json({ error: "No token provided" });
+    }
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         req.userId = decoded.userId;
         next();
     } catch (err) {
-        res.status(403).json({ error: 'Invalid token' });
+        return res.status(403).json({ error: "Invalid token" });
     }
-};
+}
 
 
 app.post('/posts', authMiddleware, async (req, res) => {
@@ -100,12 +104,13 @@ app.get('/search', async (req, res) => {
 
 // Profile route (protected)
 app.get('/profile', authMiddleware, async (req, res) => {
-    const user = await User.findById(req.userId);
-    if (!user) return res.status(404).json({ error: 'User not found' });
-    res.json({ username: user.username, email: user.email });
-  });
+    const user = await User.findById(req.userId).select("-passwordHash");
+    if (!user) return res.status(404).json({ error: "User not found" });
+    res.json(user);
+});
 
 app.use(handler);
+app.use(cookieParser());
 
 const port = process.env.PORT || 3000;
 

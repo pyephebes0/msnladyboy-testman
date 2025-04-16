@@ -26,7 +26,8 @@
       const res = await fetch("https://urgent-anthia-pyephebes0-bdb76743.koyeb.app/profile", {
         headers: {
           Authorization: `Bearer ${getToken()}`,
-        }
+        },
+         credentials: "include"
       });
 
       // อ่าน body และเก็บข้อมูลในตัวแปร
