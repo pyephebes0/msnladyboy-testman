@@ -16,7 +16,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static('static'));
 
-const mongoUri = 'mongodb+srv://xyz928msnladyboy:9U7MoU6J27ZIw1WE@pyephebes.4sn4j.mongodb.net/msnladyboy';
+const mongoUri = 'mongodb+srv://[user]:[pass]@pyephebes.4sn4j.mongodb.net/msnladyboy';
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
